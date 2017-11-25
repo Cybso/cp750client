@@ -1,0 +1,8 @@
+*.bak
+*.orig
+*.rej
+*.pdf
+core
+.hg/
+ui/test/
+__pycache__
