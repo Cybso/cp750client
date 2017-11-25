@@ -1,7 +1,42 @@
 <html>
 <head>
+	<title>CP750 Volume Control</title>
+	<meta charset="UTF-8">
+	<script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+	<script src="js/lib/require.js"></script>
+	<script>
+		window.QWebChannel(window.qt.webChannelTransport, function (channel) {
+			window.cp750bridge = channel.objects.cp750bridge;
+			window.requirejs.config({
+				baseUrl: 'js',
+				paths: {
+					knockout: 'lib/knockout-3.4.2',
+				},
+				shim: {
+					knockout: { exports: 'ko' }
+				}
+			});
+			require(['knockout', 'ViewModel'], function(ko, model) {
+				ko.applyBindings(model);
+			});
+		});
+	</script>
 </head>
 <body>
 	<h1>Hello, world!</h1>
+	<div>
+		Current Time: <span data-bind="text: currentTime"></span>
+	</div>
+	<div>
+		State: <span data-bind="text: state"></span><br>
+		<button data-bind="click: connect">Connect</button> <button data-bind="click: disconnect">Disconnect</button>
+	</div>
+	<div>
+		Command: <input type="text" data-bind="value: command">
+		<button data-bind="click: submit">Submit</button>
+	</div>
+	<div>
+		<textarea rows="5" cols="80" readonly data-bind="value: response"></textarea>
+	</div>
 </body>
 </html>

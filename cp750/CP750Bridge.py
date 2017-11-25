@@ -18,9 +18,9 @@ from PyQt5.QtCore import QObject, pyqtSlot
 
 LOGGER = logging.getLogger(__name__)
 
-class Client(QObject):
+class CP750Bridge(QObject):
 	def __init__(self, args):
-		super(Client, self).__init__()
+		super(CP750Bridge, self).__init__()
 		self.port = args.port
 		self.destination = args.destination
 		self.socket = None
@@ -40,7 +40,7 @@ class Client(QObject):
 		LOGGER.info("Connecting to %s:%d" % (self.destination, self.port))
 		try:
 			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			s.connect((self.destionation, self.port))
+			s.connect((self.destination, self.port))
 			self.stream = s.makefile("rwb", 0)
 			self.socket = s
 		except:

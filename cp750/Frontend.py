@@ -22,10 +22,10 @@ LOGGER=logging.getLogger(__name__)
 class Frontend(QMainWindow):
 	""" Provides an HTML5/javaScript based application frontend """
 
-	def __init__(self, client, args):
+	def __init__(self, cp750bridge, args):
 		super(Frontend, self).__init__()
-		self.client = client
-		self.web = WebView(self, client, args)
+		self.cp750bridge = cp750bridge
+		self.web = WebView(self, cp750bridge, args)
 		self.inspector = Inspector(self, self.web)
 		self.inspector.setVisible(False)
 		QShortcut(QKeySequence("F12"), self.web, self.toggleWebInspector)

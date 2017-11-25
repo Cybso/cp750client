@@ -84,17 +84,17 @@ def main():
 	LOGGER = logging.getLogger(__name__)
 
 	# This must be imported AFTER logging has been configured!
-	from cp750.Client import Client
+	from cp750.CP750Bridge import CP750Bridge
 	from cp750.Frontend import Frontend
 
 	# Start application (and ensure it can be killed with CTRL-C)
 	signal.signal(signal.SIGINT, signal.SIG_DFL)
 	app = QApplication(sys.argv)
-	app.setApplicationName("CP750 Volume Client")
+	app.setApplicationName("CP750 Volume CP750Bridge")
 	#app.setWindowIcon(QIcon(args.docroot + "img" + os.sep + "icon.svg"))
 
-	client = Client(args)
-	frontend = Frontend(client, args)
+	cp750bridge = CP750Bridge(args)
+	frontend = Frontend(cp750bridge, args)
 
 	if args.stayontop:
 		LOGGER.info("Enable WindowStayOnTop")

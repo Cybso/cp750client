@@ -35,14 +35,14 @@ class Inspector(QWebEngineView):
 
 class WebView(QWebEngineView):
 	""" Returns a QWebEngineView and loads the FrontendWebPage """
-	def __init__(self, parent, client, args):
+	def __init__(self, parent, cp750bridge, args):
 		if args.debug:
 			# Enable remote debugger / "inspector"
 			# Must be set before the parent constructor is called
 			LOGGER.warn("QTWEBENGINE_REMOTE_DEBUGGING enabled on port http://localhost:%s/. This may be a security issue. Remove '-d/--debug' for production environments." % (QTWEBENGINE_REMOTE_DEBUGGING_PORT))
 			os.environ['QTWEBENGINE_REMOTE_DEBUGGING'] = QTWEBENGINE_REMOTE_DEBUGGING_PORT;
 		QWebEngineView.__init__(self, parent)
-		self.setPage(FrontendWebPage(self, client, args))
+		self.setPage(FrontendWebPage(self, cp750bridge, args))
 
 class FrontendWebPage(QWebEnginePage):
 	""" Override QWebPage to redirect JavaScript console output
@@ -50,12 +50,12 @@ class FrontendWebPage(QWebEnginePage):
 	'warn', 'error' or 'exception' the appropirate level is
 	choosen instead.
 	"""
-	def __init__(self, parent, client, args):
+	def __init__(self, parent, cp750bridge, args):
 		QWebEnginePage.__init__(self, parent)
 		self.args = args
 		channel = QWebChannel(self);
 		self.setWebChannel(channel);
-		channel.registerObject("client", client);
+		channel.registerObject("cp750bridge", cp750bridge);
 
 	def javaScriptConsoleMessage(self, level, msg, line, source):
 		if msg.startswith('debug'):
