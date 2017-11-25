@@ -5,7 +5,7 @@ Dolby CP750 Client Simulation
 Simulates some commands implemented by a Dolby CP750 client.
 
 Author: Roland Tapken <roland@bitarbeiter.net>
-License: MIT
+License: GPLv3
 """
 
 import socket

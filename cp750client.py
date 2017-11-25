@@ -2,20 +2,22 @@
 """
 CP750 Volume Controller
 
-Nutzt PyQt5 mit Webengine, um den Dolby CP750
-per Ethernet-Schnittstelel (Port 61408) zu steuern.
+Uses PyQt5 and the Webengine module to control
+the volume and input mode of a Dolby CP750
+Digital Cinema Processor using the TCP/IP-Interface
+(called "telnet" in the manual) on Port 61408.
 
-Die Python-Implementierung ist minimal gehalten und
-letztendlich nur ein Wrapper zwischen grafischer HTML5-
-Oberfläche und Socket. Die eigentliche Steuerungslogik
-ist komplett im JavaScript-Teil der Oberläche implementiert.
+The python part initializes the UI and provides
+the bridge between JavaScript and the CP750. Most
+of the application logic can therefor be found in
+the ui/js/* files.
 
-Abhängigkeiten:
-- Python 3.4 oder höher
-- PyQt5 mit QtWebengine (python3-pyqt5.qtwebengine unter Debian)
+Dependencies:
+- Python >= 3.4
+- PyQt5 with QtWebengine (python3-pyqt5.qtwebengine package in Debian)
 
 Author: Roland Tapken <roland@bitarbeiter.net>
-License: MIT
+License: GPLv3
 """
 
 import os
@@ -82,8 +84,8 @@ def main():
 	LOGGER = logging.getLogger(__name__)
 
 	# This must be imported AFTER logging has been configured!
-	from cp750 import Client
-	from cp750 import Frontend
+	from cp750.Client import Client
+	from cp750.Frontend import Frontend
 
 	# Start application (and ensure it can be killed with CTRL-C)
 	signal.signal(signal.SIGINT, signal.SIG_DFL)
@@ -92,7 +94,7 @@ def main():
 	#app.setWindowIcon(QIcon(args.docroot + "img" + os.sep + "icon.svg"))
 
 	client = Client(args)
-	frontend = Frontend(args, client)
+	frontend = Frontend(client, args)
 
 	if args.stayontop:
 		LOGGER.info("Enable WindowStayOnTop")
