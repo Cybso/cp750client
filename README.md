@@ -16,7 +16,7 @@ the real processor within the next days.
 
 ## Disclaimer
 
-'''Dolby''' is a trademark of Dolby Laboratories, Inc.
+_Dolby_ is a trademark of Dolby Laboratories, Inc.
 Neither this project nor its maintainer is affiliated with Dolby Laboratories, Inc.
 
 This program is free software; you can redistribute it and/or modify
