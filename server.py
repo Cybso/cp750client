@@ -97,7 +97,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
                     print('>>>', line)
                     if line:
                         (cmd, *args) = line.split()
-                        f.write(line.encode('UTF-8') + b'\r\n')
+                        # Only on  serial lines...
+                        #f.write(line.encode('UTF-8') + b'\r\n')
                         resp = cp750.handle(cmd, args)
                         print('<<<', resp)
                         f.write(resp.encode('UTF-8') + b'\r\n\r\n')

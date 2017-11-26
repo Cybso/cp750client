@@ -22,7 +22,7 @@
 				}
 				listeners = undefined;
 			});
-			method.apply(window.gameplay, args);
+			method.apply(window, args);
 
 			return {
 				done: function(listener) {
