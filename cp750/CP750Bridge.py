@@ -14,11 +14,32 @@ import logging
 import signal
 import socket
 import sys
+import time
 
 from PyQt5.QtCore import QObject, pyqtSlot
 
 LOGGER = logging.getLogger(__name__)
 ERROR_PREFIX='⚠'
+SOCKET_TIMEOUT=250
+
+def nonblocking_readline(f, timeout=SOCKET_TIMEOUT):
+	""" Waits up to 'timeout' milliseconds for data from f. Otherwise this returns None """
+	timeout = timeout + int(round(time.time() * 1000))
+	while int(round(time.time() * 1000)) < timeout:
+		try:
+			return f.readline()
+		except OSError as e:
+			# Try again...
+			pass
+	raise IOError(0, 'Timeout')
+
+def error_to_str(e):
+	""" Converts an Exception to string """
+	if hasattr(e, 'message') and e.message is not None:
+		return ERROR_PREFIX + e.message
+	if hasattr(e, 'strerror') and e.strerror is not None:
+		return ERROR_PREFIX + e.strerror
+	return ERROR_PREFIX + type(e).__name__
 
 class CP750Bridge(QObject):
 	def __init__(self, args):
@@ -43,11 +64,13 @@ class CP750Bridge(QObject):
 		try:
 			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			s.connect((self.destination, self.port))
+			s.settimeout(500)
+			s.setblocking(False)
 			self.stream = s.makefile("rwb", 0)
 			self.socket = s
 		except Exception as e:
 			LOGGER.exception("Failed to connect to %s:%d" % (self.destination, self.port))
-			return ERROR_PREFIX + e.strerror
+			return error_to_str(e)
 		return self.getState()
 	
 	@pyqtSlot(result=str)
@@ -58,7 +81,7 @@ class CP750Bridge(QObject):
 				self.socket.close()
 			except  Exception as e:
 				LOGGER.exception("Failed to close connection")
-				return ERROR_PREFIX + e.strerror
+				return error_to_str(e)
 			finally:
 				self.socket = None
 				self.stream = None
@@ -76,13 +99,13 @@ class CP750Bridge(QObject):
 		try:
 			result=""
 			self.stream.write(command.encode('UTF-8') + b"\r\n")
-			line=self.stream.readline().decode('UTF-8').strip()
+			line=nonblocking_readline(self.stream).decode('UTF-8').strip()
 			while line:
 				result=result + line + "\n"
-				line=self.stream.readline().decode('UTF-8').strip()
+				line=nonblocking_readline(self.stream).decode('UTF-8').strip()
 			return result.strip()
 		except Exception as e:
 			LOGGER.exception("Command '%s' failed" % command)
-			return ERROR_PREFIX + e.strerror
+			return error_to_str(e)
 
 #  vim: set fenc=utf-8 ts=4 sw=4 noet :

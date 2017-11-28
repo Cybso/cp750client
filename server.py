@@ -58,7 +58,7 @@ class CP750:
             self.mute=val
         return 'cp750.sys.mute ' + str(self.mute)
 
-    def handle_sys_input_mode(self, dev):
+    def handle_sysinfo_version(self, dev):
         return 'cp750.sysinfo.version ' + 'testserver'
 
 
