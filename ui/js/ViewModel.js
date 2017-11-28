@@ -29,7 +29,7 @@
 		var submit = function() {
 			var cmd = command();
 			command("");
-			response("Executing " + command + "...");
+			response("Executing " + cmd + "...");
 			webchannel.call(window.cp750bridge.send, cmd).done(response);
 		};
 
