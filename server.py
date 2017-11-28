@@ -58,6 +58,10 @@ class CP750:
             self.mute=val
         return 'cp750.sys.mute ' + str(self.mute)
 
+    def handle_sys_input_mode(self, dev):
+        return 'cp750.sysinfo.version ' + 'testserver'
+
+
     def handle(self, cmd, args):
         if len(args) == 0:
             if cmd == 'exit':
@@ -67,6 +71,8 @@ class CP750:
             if cmd == 'status':
                 return 'not implemented'
         if len(args) == 1:
+            if cmd == 'cp750.sysinfo.version':
+                return self.handle_sysinfo_version(*args)
             if cmd == 'cp750.sys.input_mode':
                 return self.handle_sys_input_mode(*args)
             if cmd == 'cp750.ctrl.fader_delta':

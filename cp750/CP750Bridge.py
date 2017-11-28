@@ -13,10 +13,12 @@ License: GPLv3
 import logging
 import signal
 import socket
+import sys
 
 from PyQt5.QtCore import QObject, pyqtSlot
 
 LOGGER = logging.getLogger(__name__)
+ERROR_PREFIX='⚠'
 
 class CP750Bridge(QObject):
 	def __init__(self, args):
@@ -43,8 +45,9 @@ class CP750Bridge(QObject):
 			s.connect((self.destination, self.port))
 			self.stream = s.makefile("rwb", 0)
 			self.socket = s
-		except:
+		except Exception as e:
 			LOGGER.exception("Failed to connect to %s:%d" % (self.destination, self.port))
+			return ERROR_PREFIX + e.strerror
 		return self.getState()
 	
 	@pyqtSlot(result=str)
@@ -53,8 +56,9 @@ class CP750Bridge(QObject):
 			LOGGER.info("Disconnecting from %s:%d" % (self.destination, self.port))
 			try:
 				self.socket.close()
-			except:
+			except  Exception as e:
 				LOGGER.exception("Failed to close connection")
+				return ERROR_PREFIX + e.strerror
 			finally:
 				self.socket = None
 				self.stream = None
@@ -77,8 +81,8 @@ class CP750Bridge(QObject):
 				result=result + line + "\n"
 				line=self.stream.readline().decode('UTF-8').strip()
 			return result.strip()
-		except:
+		except Exception as e:
 			LOGGER.exception("Command '%s' failed" % command)
-			return "failed"
+			return ERROR_PREFIX + e.strerror
 
 #  vim: set fenc=utf-8 ts=4 sw=4 noet :
