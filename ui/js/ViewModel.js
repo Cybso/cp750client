@@ -117,6 +117,9 @@
 					connect();
 				}
 				autoconnectTimeout(autoconnectTimeout() - 1);
+			} else {
+				// Upload values
+				loadValues();
 			}
 		}, 1000);
 
