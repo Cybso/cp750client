@@ -25,12 +25,15 @@ SOCKET_TIMEOUT=250
 def nonblocking_readline(f, timeout=SOCKET_TIMEOUT):
 	""" Waits up to 'timeout' milliseconds for data from f. Otherwise this returns None """
 	timeout = timeout + int(round(time.time() * 1000))
+	line = b""
 	while int(round(time.time() * 1000)) < timeout:
-		try:
-			return f.readline()
-		except OSError as e:
-			# Try again...
-			pass
+		char = f.read(1)
+		if char is None:
+			time.sleep(0.01)
+			continue
+		line += char
+		if char == b"\n":
+			return line
 	raise IOError(0, 'Timeout')
 
 def error_to_str(e):
