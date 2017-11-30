@@ -57,6 +57,11 @@ class CP750Bridge(QObject):
 		if self.socket is None:
 			return "disconnected"
 		else:
+			# Test if socket is alive...
+			result = self.send('cp750.sysinfo.version ?')
+			if not result or result.startswith(ERROR_PREFIX):
+				self.disconnect()
+				return result
 			return "connected"
 	
 	@pyqtSlot(result=str)

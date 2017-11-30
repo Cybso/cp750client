@@ -2,6 +2,7 @@
 <head>
 	<title>CP750 Volume Control</title>
 	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
 	<script src="qrc:///qtwebchannel/qwebchannel.js"></script>
 	<script src="js/lib/require.js"></script>
 	<script>
@@ -22,7 +23,32 @@
 		});
 	</script>
 </head>
-<body>
+<body  data-bind="css: { connected: connected }">
+	<div id="loader">
+		<div class="loader-content">
+			<div>
+				Warte auf Verbindung...
+			</div>
+			<div class="cssload-thecube loader-animation" data-bind="click: connect">
+				<div class="cssload-cube cssload-c1"></div>
+				<div class="cssload-cube cssload-c2"></div>
+				<div class="cssload-cube cssload-c4"></div>
+				<div class="cssload-cube cssload-c3"></div>
+			</div>
+			<div>
+				<button data-bind="click: connect">Verbinden (<span data-bind="text: autoconnectTimeout"></span>)</button>
+			</div>
+		</div>
+	</div>
+	<div id="status-bar">
+		<div id="status-bar-state" data-bind="text: state"></div>
+		<div id="status-bar-error" data-bind="if: error">
+			<span data-bind="text: error"></span>
+			(<span data-bind="text: errorLastUpdate().toLocaleTimeString()"></span>)
+		</div>
+		<div id="status-bar-time" data-bind="text: currentTime().toLocaleTimeString()"></div>
+	</div>
+
 	<h1>Hello, world!</h1>
 	<div>
 		Current Time: <span data-bind="text: currentTime"></span>
