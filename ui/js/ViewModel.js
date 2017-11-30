@@ -155,6 +155,13 @@
 		};
 		faderControl.dec = function() { faderControl.decValue(1); };
 
+		// Calculate a color from blue (H=235) to red (H=0)
+		faderControl.color = ko.pureComputed(function() {
+			var hue = (100 - faderValue()) * 2.35; // 0 (red) .. 235 (blue)
+			console.log(faderValue(), hue);
+			return 'hsl(' + Math.floor(hue) + ',100%,26%)';
+		});
+
 		// Add a write-rate limitted fader
 		var rateLimittedFader = ko.observable().extend({
 			rateLimit: { timeout: 500, method: "notifyWhenChangesStop" }

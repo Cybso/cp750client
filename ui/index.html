@@ -63,7 +63,7 @@
 			<button data-bind="click: function() { mute(1); }">Mute</button>
 			<button data-bind="click: function() { mute(0); }">Unmute</button>
 		</div>
-		<div class="volume-control">
+		<div class="volume-control" data-bind="style: { 'background-color': fader.color }">
 			Fader: <span data-bind="text: fader"></span>
 			<input type="range" min="0" max="100" step="1" data-bind="value: fader.withRateLimit">
 			<button data-bind="click: fader.dec">-</button>
