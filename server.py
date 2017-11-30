@@ -25,10 +25,16 @@ class CP750:
         self.fader = 35
         self.mute = 0
         self.input_mode = 'dig_1'
+        self.last_input_mode = None
 
     def handle_sys_input_mode(self, dev):
         """ Values: analog | dig_1 | dig_2 | dig_3 | dig_4 | last | mic | non_sync """
-        if dev in ['analog', 'dig_1', 'dig_2', 'dig_3', 'dig_4', 'last', 'mic', 'non_sync']:
+        if dev == 'last':
+            if self.last_input_mode is not None:
+                self.input_mode = self.last_input_mode
+                self.last_input_mode = None
+        elif dev in ['analog', 'dig_1', 'dig_2', 'dig_3', 'dig_4', 'last', 'mic', 'non_sync']:
+            self.last_input_mode = self.input_mode
             self.input_mode = dev
         return 'cp750.sys.input_mode ' + self.input_mode
 

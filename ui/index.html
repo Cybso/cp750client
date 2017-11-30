@@ -27,7 +27,7 @@
 	<div id="loader">
 		<div class="loader-content">
 			<div>
-				Warte auf Verbindung...
+				Waiting for connection...
 			</div>
 			<div class="cssload-thecube loader-animation" data-bind="click: connect">
 				<div class="cssload-cube cssload-c1"></div>
@@ -36,12 +36,18 @@
 				<div class="cssload-cube cssload-c3"></div>
 			</div>
 			<div>
-				<button data-bind="click: connect">Verbinden (<span data-bind="text: autoconnectTimeout"></span>)</button>
+				<button data-bind="click: connect">Connect (<span data-bind="text: autoconnectTimeout"></span>)</button>
 			</div>
 		</div>
 	</div>
+
 	<div id="status-bar">
-		<div id="status-bar-state" data-bind="text: state"></div>
+		<div id="status-bar-state">
+			<span data-bind="text: state"></span>
+			<!-- ko if: version -->
+				(<span data-bind="text: version"></span>)
+			<!-- /ko -->
+		</div>
 		<div id="status-bar-error" data-bind="if: error">
 			<span data-bind="text: error"></span>
 			(<span data-bind="text: errorLastUpdate().toLocaleTimeString()"></span>)
@@ -49,20 +55,26 @@
 		<div id="status-bar-time" data-bind="text: currentTime().toLocaleTimeString()"></div>
 	</div>
 
-	<h1>Hello, world!</h1>
-	<div>
-		Current Time: <span data-bind="text: currentTime"></span>
-	</div>
-	<div>
-		State: <span data-bind="text: state"></span><br>
-		<button data-bind="click: connect">Connect</button> <button data-bind="click: disconnect">Disconnect</button>
-	</div>
-	<div>
-		Command: <input type="text" data-bind="value: command">
-		<button data-bind="click: submit">Submit</button>
-	</div>
-	<div>
-		<textarea rows="5" cols="80" readonly data-bind="value: response"></textarea>
+	<h1>CP750 Volume Control</h1>
+
+	<div id="volume-controls">
+		<div class="volume-control">
+			Mute: <span data-bind="text: mute"></span>
+			<button data-bind="click: function() { mute(1); }">Mute</button>
+			<button data-bind="click: function() { mute(0); }">Unmute</button>
+		</div>
+		<div class="volume-control">
+			Fader: <span data-bind="text: fader"></span>
+			<input type="range" min="0" max="100" step="1" data-bind="value: fader.withRateLimit">
+			<button data-bind="click: fader.dec">-</button>
+			<button data-bind="click: fader.inc">+</button>
+		</div>
+		<div class="volume-control">
+			Input Mode: <span data-bind="text: inputMode"></span>
+			<ul data-bind="foreach: inputMode.list">
+				<li><input type="radio" data-bind="checked: $parent.inputMode, checkedValue: value"> <span data-bind="text: label"></span></li>
+			</ul>
+		</div>
 	</div>
 </body>
 </html>
