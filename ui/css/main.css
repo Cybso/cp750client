@@ -1,12 +1,25 @@
 @import 'loader.css';
 
-html, body {
+* {
 	box-sizing: border-box;
+}
+
+html, body {
 	position: relative;
 	width: 100%;
 	height: 100%;
 	background-color: #333;
 	color: #ccc;
+	margin: 0;
+	padding: 0;
+}
+
+button {
+	color: #ffffff;
+	background-color: #4b4b4b;
+	border: 0;
+	font-size: 1rem;
+	box-shadow: 5px 5px rgba(0,0,0,0.5); 
 }
 
 #loader {
@@ -54,4 +67,97 @@ body.connected #loader {
 
 #status-bar #status-bar-error {
 	color: #ff0000;
+}
+
+#controls {
+	position: absolute;
+	top: 50%;
+	width: 100%;
+	transform: translate(0%, -50%);
+}
+
+
+
+.control-volume {
+	font-size: 8em;
+	width: 2em;
+	margin: auto;
+	transform: rotate(-90deg);
+}
+
+.control-volume-label {
+	display: inline-block;
+	position: relative;
+	width: 2em;
+	height: 2em;
+	border-radius: 50%;
+	border: 1px solid #999;
+	transform: rotate(90deg);
+}
+
+.control-volume-label > * {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+
+.control-volume-label.muted {
+	color: #aaa;
+	border-color: red;
+}
+
+
+.control-volume-fader {
+	display: flex;
+	margin: 1rem 0;
+	background: linear-gradient(to right,
+		hsl(235, 100%, 25%) 0%,
+		hsl(190, 100%, 25%) 10%,
+		hsl(150, 100%, 25%) 20%,
+		hsl(115, 100%, 25%) 30%,
+		hsl(84, 100%, 25%) 40%,
+		hsl(58, 100%, 25%) 50%,
+		hsl(37, 100%, 25%) 60%,
+		hsl(21, 100%, 25%) 70%,
+		hsl(9, 100%, 25%) 80%,
+		hsl(2, 100%, 25%) 90%,
+		hsl(0, 100%, 25%) 100%
+	)
+}
+
+.control-volume-fader > * {
+	display: block;
+}
+
+.control-volume-fader > button {
+	font-size: 2rem;
+	box-shadow: none;
+}
+
+.control-volume-fader > input {
+	flex-grow: 1;
+}
+
+.control-volume-mute-button {
+	text-align: center;
+	margin: 1rem;
+}
+
+.control-volume-mute-button > img {
+	height: 0.5em;
+	transform: rotate(90deg);
+}
+
+.control-input-mode {
+	text-align: center;
+}
+
+.control-input-mode button {
+	margin: 0 0.5rem;
+}
+
+.control-input-mode button.active {
+	background-color: #0000ff;
 }

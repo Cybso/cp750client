@@ -53,7 +53,7 @@
 		var send = function(command, value, callback) {
 			webchannel.call(window.cp750bridge.send, "" + command + " " + value)
 				.done(function(response) {
-					console.log(command, value, response);
+					//console.log(command, value, response);
 					if (response.startsWith(command + ' ')) {
 						response = response.substring(command.length + 1);
 						callback(response);
@@ -156,12 +156,12 @@
 			}
 			faderControl.inc(-parseInt(delta));
 		};
-		faderControl.dec = function() { faderControl.decValue(1); };
+		faderControl.dec = function() { faderControl.incValue(-1); };
 
 		// Calculate a color from blue (H=235) to red (H=0)
 		faderControl.color = ko.pureComputed(function() {
-			var hue = (100 - faderValue()) * 2.35; // 0 (red) .. 235 (blue)
-			console.log(faderValue(), hue);
+			var hue = 235 * Math.pow((1.0 - faderValue()/100.0), 2); // 0 (red) .. 235 (blue)
+			//console.log(faderValue(), hue);
 			return 'hsl(' + Math.floor(hue) + ',100%,26%)';
 		});
 
@@ -190,6 +190,16 @@
 		});
 		inputModeControl.list = ko.pureComputed(function() { return INPUT_MODES; });
 
+		var muteControl = ko.computed({
+			read: muteValue,
+			write: function(value) {
+				sendBool('cp750.sys.mute', value, muteValue);
+			}
+		});
+		muteControl.toggle = function() {
+			sendBool('cp750.sys.mute', muteValue() ? 0 : 1, muteValue);
+		};
+
 		return {
 			currentTime: ko.pureComputed(currentTime),
 			state: ko.pureComputed(state),
@@ -204,12 +214,7 @@
 			version: ko.computed(versionValue),
 			fader: faderControl,
 			inputMode: inputModeControl,
-			mute: ko.computed({
-				read: muteValue,
-				write: function(value) {
-					sendBool('cp750.sys.mute', value, muteValue);
-				}
-			}),
+			mute: muteControl,
 		};
 	});
 })();

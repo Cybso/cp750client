@@ -57,23 +57,40 @@
 
 	<h1>CP750 Volume Control</h1>
 
-	<div id="volume-controls">
-		<div class="volume-control">
-			Mute: <span data-bind="text: mute"></span>
-			<button data-bind="click: function() { mute(1); }">Mute</button>
-			<button data-bind="click: function() { mute(0); }">Unmute</button>
+	<div id="controls">
+		<div class="control control-volume">
+			<div class="control control-volume-label" data-bind="style: { 'background-color': fader.color }, css: { muted: mute }">
+				<span data-bind="text: fader()/10"></span>
+			</div>
+			<div class="control control-volume-fader">
+				<button data-bind="click: fader.dec">&lt;</button>
+				<input type="range" min="0" max="100" step="1" data-bind="value: fader.withRateLimit">
+				<button data-bind="click: fader.inc">&gt;</button>
+			</div>
+			<div class"control control-volume-mute">
+				<div data-bind="click: mute.toggle" class="control-volume-mute-button">
+					<!-- ko if: mute --><img src="img/speaker/speaker-muted.svg"><!-- /ko -->
+					<!-- ko ifnot: mute -->
+						<!-- ko if: fader() < 10 -->
+							<img src="img/speaker/speaker-off.svg">
+						<!-- /ko -->
+						<!-- ko if: fader() >= 10 && fader() < 41 -->
+							<img src="img/speaker/speaker-silent.svg">
+						<!-- /ko -->
+						<!-- ko if: fader() >= 41 -->
+							<img src="img/speaker/speaker-loud.svg">
+						<!-- /ko -->
+					<!-- /ko -->
+				</div>
+			</div>
 		</div>
-		<div class="volume-control" data-bind="style: { 'background-color': fader.color }">
-			Fader: <span data-bind="text: fader"></span>
-			<input type="range" min="0" max="100" step="1" data-bind="value: fader.withRateLimit">
-			<button data-bind="click: fader.dec">-</button>
-			<button data-bind="click: fader.inc">+</button>
-		</div>
-		<div class="volume-control">
-			Input Mode: <span data-bind="text: inputMode"></span>
-			<ul data-bind="foreach: inputMode.list">
-				<li><input type="radio" data-bind="checked: $parent.inputMode, checkedValue: value"> <span data-bind="text: label"></span></li>
-			</ul>
+		<div class="control control-input-mode" data-bind="foreach: inputMode.list">
+			<button data-bind="
+				click: function() { $parent.inputMode(value) },
+				css: { active: $parent.inputMode() == value },
+				attr: { 'data-input-mode': value },
+				text: label
+			"></button>
 		</div>
 	</div>
 </body>
