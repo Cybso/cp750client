@@ -59,6 +59,7 @@ def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("destination", metavar="DESTINATION", help="Hostname or IP adress of CP750 cinema processor")
 	parser.add_argument("-p", "--port", metavar="PORT", type=int, default=61408, required=False, help="Port of CP750 cinema processor")
+	parser.add_argument("-m", "--maximized", help="start in maximized window mode", action="store_true")
 	parser.add_argument("-f", "--fullscreen", help="start in fullscreen mode", action="store_true")
 	parser.add_argument("-s", "--stayontop", help="stay on top (while not running any apps)", action="store_true")
 	parser.add_argument("-r", "--docroot", help="Document root of UI files (default: %s)" % (basepath), default=basepath)
@@ -103,6 +104,9 @@ def main():
 	if args.fullscreen:
 		LOGGER.info("Fullscreen mode")
 		frontend.showFullScreen()
+	elif args.maximized:
+		frontend.setWindowState(Qt.WindowMaximized)
+		frontend.show()
 	else:
 		frontend.show()
 

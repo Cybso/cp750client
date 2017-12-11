@@ -10,6 +10,7 @@ Author: Roland Tapken <roland@bitarbeiter.net>
 License: GPLv3
 """
 
+import sys
 import logging
 from .WebengineWebView import WebView, Inspector
 
