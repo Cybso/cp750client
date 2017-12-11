@@ -170,9 +170,11 @@
 			rateLimit: { timeout: 500, method: "notifyWhenChangesStop" }
 		});
 		rateLimittedFader.subscribe(faderControl);
-		faderControl.withRateLimit = ko.computed({
-			read: faderControl,
-			write: rateLimittedFader
+		faderControl.withRateLimit = ko.observable(faderControl())
+		faderControl.withRateLimit.subscribe(rateLimittedFader)
+		faderControl.subscribe(faderControl.withRateLimit)
+		faderControl.modified = ko.pureComputed(function() {
+			return faderControl() != faderControl.withRateLimit();
 		});
 
 		// Create inputModeControl

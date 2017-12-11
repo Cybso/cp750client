@@ -95,6 +95,10 @@ body.connected #loader {
 	transform: rotate(90deg);
 }
 
+.control-volume-label.modified {
+	font-style: italic;
+}
+
 .control-volume-label > * {
 	position: absolute;
 	top: 50%;

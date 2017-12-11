@@ -59,12 +59,12 @@
 
 	<div id="controls">
 		<div class="control control-volume">
-			<div class="control control-volume-label" data-bind="style: { 'background-color': fader.color }, css: { muted: mute }">
-				<span data-bind="text: fader()/10"></span>
+			<div class="control control-volume-label" data-bind="style: { 'background-color': fader.color }, css: { muted: mute, modified: fader.modified }">
+				<span data-bind="text: fader.withRateLimit()/10"></span>
 			</div>
 			<div class="control control-volume-fader">
 				<button data-bind="click: fader.dec">&lt;</button>
-				<input type="range" min="0" max="100" step="1" data-bind="value: fader.withRateLimit">
+				<input type="range" min="0" max="100" step="1" data-bind="textInput: fader.withRateLimit">
 				<button data-bind="click: fader.inc">&gt;</button>
 			</div>
 			<div class"control control-volume-mute">
