@@ -101,25 +101,29 @@
 		webchannel.call(window.cp750bridge.getState).done(state);
 		window.setInterval(function() {
 			// Update state every 10 seconds
-			webchannel.call(window.cp750bridge.getState).done(state).error(function(message) {
-				state('disconnected');
-				error(message);
-			});
+			if (webchannel.idle()) {
+				webchannel.call(window.cp750bridge.getState).done(state).error(function(message) {
+					state('disconnected');
+					error(message);
+				});
+			}
 		}, 30000);
 
 		window.setInterval(function() {
 			// Update current time
 			currentTime(new Date());
 
-			// Check if we need to autoconnect
-			if (state()  !== 'connected') {
-				if (autoconnectTimeout() === 0) {
-					connect();
+			if (webchannel.idle()) {
+				// Check if we need to autoconnect
+				if (state()  !== 'connected') {
+					if (autoconnectTimeout() === 0) {
+						connect();
+					}
+					autoconnectTimeout(autoconnectTimeout() - 1);
+				} else {
+					// Upload values
+					loadValues();
 				}
-				autoconnectTimeout(autoconnectTimeout() - 1);
-			} else {
-				// Upload values
-				loadValues();
 			}
 		}, 1000);
 

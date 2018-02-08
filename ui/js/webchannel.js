@@ -10,6 +10,8 @@
 	var ERROR_PREFIX = '⚠';
 
 	define(function() {
+		var active_calls = 0;
+
 		function call(method) {
 			var args = [];
 			for (var i = 1; i < arguments.length; i+=1) {
@@ -17,7 +19,9 @@
 			}
 			var result, error;
 			var listeners = [], errListeners = [];
+			active_calls++;
 			args.push(function(value) {
+				active_calls--;
 				var i;
 				if (typeof value === 'string' && value !== '' && value.charAt(0) === ERROR_PREFIX) {
 					error = value.substring(1);
@@ -60,7 +64,10 @@
 		}
 
 		return {
-			call: call
+			call: call,
+			idle: function() {
+				return active_calls == 0;
+			}
 		};
 	});
 })();
